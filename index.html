@@ -62,14 +62,14 @@ h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.1
 .hero>*{grid-column:1/-1}
 .hero .hero-head{grid-column:1;min-width:0;display:grid;gap:6px}
 .hero .hero-bear{grid-column:2;grid-row:1}
-.lang-title{font-family:var(--f-display);font-weight:800;font-size:1rem;color:var(--accent);display:flex;align-items:baseline;gap:8px}
+.lang-title{font-family:var(--f-display);font-weight:800;font-size:1rem;color:var(--accent);display:flex;flex-wrap:wrap;align-items:baseline;column-gap:8px;white-space:nowrap}
 .lang-title .nat{font-size:1.5rem}
 .hero-bear{display:grid;justify-items:center;gap:4px}
 .bubble{background:var(--sunk);border-radius:12px;padding:3px 10px;font-size:.9375rem;font-weight:700;position:relative;white-space:nowrap}
 .bubble::after{content:"";position:absolute;left:50%;bottom:-6px;margin-left:-6px;border:6px solid transparent;border-bottom:0;border-top-color:var(--sunk)}
 @keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:none;opacity:1}}
 .hero.switched .hero-bear,.hero.switched .lang-title{animation:pop .35s ease-out}
-.rank{display:inline-flex;align-items:center;gap:6px;font-size:.8125rem;font-weight:700;color:var(--honey)}
+.rank{flex-wrap:wrap;display:inline-flex;align-items:center;gap:6px;font-size:.8125rem;font-weight:700;color:var(--honey)}
 .paw{width:16px;height:16px;display:inline-block;vertical-align:-3px;color:var(--accent)}
 .stats .paw{color:var(--honey)}
 .node.done .dot .paw{width:20px;height:20px;color:var(--on-accent)}
@@ -196,6 +196,23 @@ input.type{width:100%;font-family:var(--f-native);font-size:1.75rem;padding:12px
 .drive-big .d2{font-size:1.25rem;opacity:.85}
 .drive-big .d3{font-family:var(--f-native);font-size:2rem;opacity:.55}
 .drive-note{font-size:.9375rem;color:#A9AEC2;text-align:center;max-width:520px;margin:0 auto}
+/* Wide screens (e.g. an unfolded Galaxy Fold): use the space */
+@media (min-width:600px){
+  #app{max-width:760px}
+  .path{grid-template-columns:1fr 1fr;column-gap:12px}
+  .stage-label{grid-column:1/-1}
+  .trace-wrap{width:min(100%,420px)}
+  .opts.letter-opts{grid-template-columns:repeat(4,1fr)}
+}
+/* Very narrow cover screens */
+@media (max-width:360px){
+  .top{gap:8px}
+  .seg button{padding:6px 10px}
+  .hero{padding:16px}
+  .hero h2{font-size:1.5rem}
+  .glyph{font-size:5.5rem}
+  .big-nat{font-size:2rem}
+}
 @media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} }
 @media (max-width:420px){ .method div{font-size:.6875rem} .opts{grid-template-columns:1fr} .opt.letter{min-height:72px} }
 </style>
@@ -932,7 +949,7 @@ function exPick(ex,it){
   const opts=shuffle([it,...shuffle(pool).slice(0,3)]);
   const c=shell(`<div class="kind">Which letter do you hear?</div>
     <div class="say-row"><button class="iconbtn" data-play aria-label="Play">${ICON.play}</button></div>
-    <div class="opts">${opts.map(o=>`<button class="opt letter" data-id="${o.id}">${esc(o.t)}</button>`).join('')}</div>`);
+    <div class="opts letter-opts">${opts.map(o=>`<button class="opt letter" data-id="${o.id}">${esc(o.t)}</button>`).join('')}</div>`);
   c.querySelector('[data-play]').onclick=()=>sayItem(it); sayItem(it);
   c.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
     c.querySelectorAll('.opt').forEach(x=>x.disabled=true);
@@ -968,7 +985,9 @@ function exTrace(ex,it){
   const end=()=>{ cur=null; };
   k.addEventListener('pointerup',end); k.addEventListener('pointercancel',end);
   document.fonts&&document.fonts.load(fontSpec(100),it.t).then(size).catch(size); size();
-  window.addEventListener('resize',size,{once:true});
+  if(window._traceResize) window.removeEventListener('resize',window._traceResize);
+  window._traceResize=()=>{ if(document.body.contains(k)) size(); };
+  window.addEventListener('resize',window._traceResize);
   $('#clr').onclick=()=>{ strokes.length=0; redrawInk(); };
   if($('#hint')) $('#hint').onclick=()=>{ showGuide=true; size(); };
   $('#chk').onclick=()=>{
