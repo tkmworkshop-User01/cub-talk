@@ -1,0 +1,1157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#8A4A1F" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15120E" media="(prefers-color-scheme: dark)">
+<meta name="description" content="Learn Japanese and Korean the way a cub learns: hear and repeat, small sentences, then letters.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Cub Talk">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Cub Talk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=Zen+Maru+Gothic:wght@500;700&family=Gowun+Dodum&display=swap">
+<style>
+/* Layout: one centred column (max 640px) — header, then either the level path, a lesson card, or the full-screen drive panel. */
+:root{
+  --bg:#F6F3EC; --surface:#FFFDF8; --sunk:#ECE6DA; --ink:#2A2118; --muted:#6E6253; --line:#DDD4C4;
+  --ja:#8A4A1F; --ko:#2D6A4C; --accent:var(--ja); --on-accent:#FFFFFF;
+  --fur:#9A5B2E; --fur-2:#E9C99B; --nose:#3A2416; --honey:#D99A1E;
+  --good:#1D8548; --good-soft:#DDF3E6; --bad:#B8322F; --bad-soft:#FBE3E2; --gold:#C98A0B;
+  --drive-bg:#14110D; --drive-ink:#F4EEE4;
+  --f-display:"Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --f-ui:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-ja:"Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+  --f-ko:"Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  --f-native:var(--f-ja);
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#15120E; --surface:#201B15; --sunk:#2B241C; --ink:#F2EBDF; --muted:#B2A693; --line:#3A3127;
+  --ja:#E2A266; --ko:#74C79C; --on-accent:#1A140E; --fur:#B87442; --fur-2:#EED3A8; --nose:#2A1A10; --honey:#F0B83E;
+  --good:#53C985; --good-soft:#163524; --bad:#F27B76; --bad-soft:#3A1C1E; --gold:#F0BE4E; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#15120E; --surface:#201B15; --sunk:#2B241C; --ink:#F2EBDF; --muted:#B2A693; --line:#3A3127;
+  --ja:#E2A266; --ko:#74C79C; --on-accent:#1A140E; --fur:#B87442; --fur-2:#EED3A8; --nose:#2A1A10; --honey:#F0B83E;
+  --good:#53C985; --good-soft:#163524; --bad:#F27B76; --bad-soft:#3A1C1E; --gold:#F0BE4E; color-scheme:dark }
+#app[data-lang="ko"]{ --accent:var(--ko); --f-native:var(--f-ko) }
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:16px;line-height:1.5}
+#app{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 120px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,.opt:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.nat{font-family:var(--f-native)}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+.muted{color:var(--muted)}
+.small{font-size:.875rem}
+
+/* header */
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-block:6px 14px}
+.brand{font-family:var(--f-display);font-weight:800;font-size:1.25rem;letter-spacing:-.01em;margin-right:auto}
+.brand{display:flex;align-items:center;gap:8px}
+.brand span{color:var(--accent)}
+.brand-bear svg{width:34px;height:34px;display:block}
+.bear{display:block;flex:none}
+.hero{grid-template-columns:1fr auto;align-items:start}
+.hero>*{grid-column:1/-1}
+.hero .hero-head{grid-column:1;min-width:0;display:grid;gap:6px}
+.hero .hero-bear{grid-column:2;grid-row:1}
+.lang-title{font-family:var(--f-display);font-weight:800;font-size:1rem;color:var(--accent);display:flex;align-items:baseline;gap:8px}
+.lang-title .nat{font-size:1.5rem}
+.hero-bear{display:grid;justify-items:center;gap:4px}
+.bubble{background:var(--sunk);border-radius:12px;padding:3px 10px;font-size:.9375rem;font-weight:700;position:relative;white-space:nowrap}
+.bubble::after{content:"";position:absolute;left:50%;bottom:-6px;margin-left:-6px;border:6px solid transparent;border-bottom:0;border-top-color:var(--sunk)}
+@keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:none;opacity:1}}
+.hero.switched .hero-bear,.hero.switched .lang-title{animation:pop .35s ease-out}
+.rank{display:inline-flex;align-items:center;gap:6px;font-size:.8125rem;font-weight:700;color:var(--honey)}
+.paw{width:16px;height:16px;display:inline-block;vertical-align:-3px;color:var(--accent)}
+.stats .paw{color:var(--honey)}
+.node.done .dot .paw{width:20px;height:20px;color:var(--on-accent)}
+.drive-big .bear{margin:0 auto}
+@keyframes bob{50%{transform:translateY(-6px) rotate(-3deg)}}
+.bob{animation:bob 1.6s ease-in-out infinite;transform-origin:50% 90%}
+.seg{display:inline-flex;background:var(--sunk);border-radius:999px;padding:3px}
+.seg button{border:0;background:transparent;border-radius:999px;padding:6px 14px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgb(0 0 0 / .12)}
+.stats{display:flex;gap:12px;font-size:.875rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.stats b{color:var(--ink)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:12px 22px;font-weight:700;background:var(--accent);color:var(--on-accent);min-height:48px}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.wide{width:100%}
+.btn:disabled{opacity:.45;cursor:default}
+.iconbtn{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;min-width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0 12px;font-weight:600}
+.iconbtn svg,.btn svg{width:20px;height:20px;flex:none}
+
+/* home */
+.hero{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px;display:grid;gap:14px}
+.eyebrow{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.hero h2{font-size:1.75rem}
+.hero-row{display:flex;gap:10px;flex-wrap:wrap}
+.hero-row .btn{flex:1 1 200px}
+.method{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-block:18px 6px}
+.method div{font-size:.75rem;line-height:1.3;color:var(--muted);border-top:3px solid var(--line);padding-top:6px}
+.method div.on{border-color:var(--accent);color:var(--ink);font-weight:600}
+.path{display:grid;gap:4px;margin-top:18px}
+.stage-label{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 0 4px}
+.node{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--r);border:1px solid transparent;background:transparent;text-align:left;width:100%}
+.node:not(:disabled):hover{background:var(--surface);border-color:var(--line)}
+.node:disabled{cursor:default}
+.dot{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;flex:none;font-weight:700;font-variant-numeric:tabular-nums;background:var(--sunk);color:var(--muted)}
+.node.done .dot{background:var(--accent);color:var(--on-accent)}
+.node.current .dot{background:var(--surface);color:var(--accent);box-shadow:0 0 0 3px var(--accent)}
+.node.locked{opacity:.55}
+.node .t{font-weight:600;min-width:0}
+.node .s{font-size:.8125rem;color:var(--muted)}
+.note{font-size:.8125rem;color:var(--muted);background:var(--sunk);border-radius:10px;padding:10px 12px;margin-top:14px}
+
+/* lesson */
+.lbar{display:flex;align-items:center;gap:12px;padding-block:4px 16px}
+.prog{flex:1;height:12px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .35s ease}
+.close{border:0;background:transparent;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:var(--muted)}
+.close svg{width:22px;height:22px}
+.card{display:grid;gap:18px;padding-bottom:20px}
+.kind{font-size:.8125rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.prompt{font-family:var(--f-display);font-size:1.5rem;font-weight:600}
+.pic{font-size:4.5rem;line-height:1}
+.say-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pron{font-size:1.375rem;font-weight:600}
+.pron.nat{font-size:1.75rem}
+.big-nat{font-family:var(--f-native);font-size:2.4rem;line-height:1.3;font-weight:700}
+.glyph{font-family:var(--f-native);font-size:7rem;line-height:1;font-weight:700;color:var(--accent)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opts.one{grid-template-columns:1fr}
+.opt{background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:var(--r);padding:14px;text-align:left;display:flex;align-items:center;gap:10px;min-height:64px}
+.opt .em{font-size:1.75rem}
+.opt.letter{justify-content:center;font-family:var(--f-native);font-size:2.5rem;font-weight:700}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.tiles{display:flex;flex-wrap:wrap;gap:8px;min-height:58px}
+.answer-line{border-bottom:2px solid var(--line);padding-bottom:10px}
+.tile{background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:12px;padding:6px 12px;display:grid;justify-items:center;line-height:1.2}
+.tile .w{font-weight:700;font-size:1.125rem}
+.tile .w.nat{font-size:1.375rem}
+.tile .g{font-size:.75rem;color:var(--muted)}
+.tile.used{visibility:hidden}
+.gloss{display:flex;flex-wrap:wrap;gap:8px}
+.gloss .tile{cursor:pointer}
+.mic{width:96px;height:96px;border-radius:50%;border:0;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;margin:4px auto 0;box-shadow:0 6px 18px rgb(0 0 0 / .18)}
+.mic svg{width:40px;height:40px}
+.mic.on{animation:pulse 1.2s ease-in-out infinite;background:var(--bad)}
+@keyframes pulse{50%{box-shadow:0 0 0 14px rgb(184 50 47 / .18)}}
+.heard{text-align:center;display:grid;gap:10px;justify-items:center}
+.heard .h{font-family:var(--f-native);font-size:1.25rem}
+.compare{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.tinfo{font-size:.8125rem;color:var(--muted);text-align:center}
+input.type{width:100%;font-family:var(--f-native);font-size:1.75rem;padding:12px 14px;border-radius:var(--r);border:2px solid var(--line);background:var(--surface);color:var(--ink)}
+.keypad{display:flex;flex-wrap:wrap;gap:6px}
+.keypad button{min-width:46px;height:46px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);font-family:var(--f-native);font-size:1.25rem;display:grid;place-items:center;line-height:1}
+.keypad button small{font-family:var(--f-ui);font-size:.625rem;color:var(--muted)}
+.trace-wrap{position:relative;width:min(100%,320px);aspect-ratio:1;margin:0 auto;border-radius:18px;background:var(--surface);border:2px dashed var(--line);touch-action:none}
+.trace-wrap canvas{position:absolute;inset:0;width:100%;height:100%;border-radius:18px}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.toast{position:fixed;z-index:60;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));top:calc(10px + env(safe-area-inset-top,0px));max-width:560px;margin:0 auto;background:var(--surface);color:var(--ink);border:2px solid var(--honey);border-radius:var(--r);padding:12px 14px;display:flex;gap:10px;align-items:flex-start;box-shadow:0 8px 24px rgb(0 0 0 / .18);font-size:.9375rem}
+.toast .iconbtn{flex:none;min-width:36px;height:36px;padding:0}
+
+/* feedback sheet */
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:20;padding-block:16px calc(16px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));transform:translateY(110%);transition:transform .22s ease}
+.sheet.show{transform:none}
+.sheet.good{background:var(--good-soft)}
+.sheet.bad{background:var(--bad-soft)}
+.sheet .in{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.sheet .msg{flex:1 1 220px;min-width:0}
+.sheet .msg b{display:block;font-family:var(--f-display);font-size:1.25rem}
+.sheet.good b{color:var(--good)}
+.sheet.bad b{color:var(--bad)}
+.sheet .ans{font-family:var(--f-native);font-size:1.125rem}
+.sheet .btn{background:var(--bad);color:#fff}
+
+/* level complete */
+.done-card{text-align:center;display:grid;gap:16px;justify-items:center;padding-top:30px}
+.done-card h2{font-size:2rem}
+.done-stats{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.done-stats div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 16px;font-variant-numeric:tabular-nums}
+.done-stats b{display:block;font-size:1.5rem;font-family:var(--f-display)}
+.unlock{background:var(--surface);border:2px solid var(--accent);border-radius:var(--r);padding:12px 16px;max-width:420px}
+.countdown{width:min(100%,360px);height:8px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.countdown i{display:block;height:100%;background:var(--accent);width:0}
+.countdown i.go{width:100%;transition:width 4s linear}
+
+/* drive */
+.drive{position:fixed;inset:0;z-index:40;background:var(--drive-bg);color:var(--drive-ink);display:flex;flex-direction:column;padding-block:calc(16px + env(safe-area-inset-top,0px)) calc(16px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));gap:16px}
+.drive-top{display:flex;justify-content:space-between;align-items:center;font-variant-numeric:tabular-nums;font-size:1.125rem}
+.drive-top button{background:transparent;border:1.5px solid #3A3F52;border-radius:999px;padding:8px 16px;color:var(--drive-ink);font-weight:600;min-height:44px}
+.drive-big{flex:1;border:0;border-radius:28px;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;align-content:center;gap:10px;text-align:center;padding:20px}
+.drive-big.running{background:#1B1F2C;color:var(--drive-ink)}
+.drive-big.paused{background:#2A2E3E;color:var(--drive-ink)}
+.drive-big .d1{font-family:var(--f-display);font-size:clamp(2.5rem,12vw,4.5rem);font-weight:800;line-height:1}
+.drive-big .d2{font-size:1.25rem;opacity:.85}
+.drive-big .d3{font-family:var(--f-native);font-size:2rem;opacity:.55}
+.drive-note{font-size:.9375rem;color:#A9AEC2;text-align:center;max-width:520px;margin:0 auto}
+@media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} }
+@media (max-width:420px){ .method div{font-size:.6875rem} .opts{grid-template-columns:1fr} .opt.letter{min-height:72px} }
+</style>
+</head>
+<body>
+<div id="app" data-lang="ja">
+  <header class="top">
+    <div class="brand"><span class="brand-bear" id="brandbear"></span>Cub <span>Talk</span></div>
+    <div class="seg" role="group" aria-label="Language">
+      <button id="lang-ja" data-lang="ja" aria-pressed="true"><span class="nat" style="font-family:var(--f-ja)">日本語</span></button>
+      <button id="lang-ko" data-lang="ko" aria-pressed="false"><span class="nat" style="font-family:var(--f-ko)">한국어</span></button>
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+  <main id="view"></main>
+</div>
+<div class="sheet" id="sheet" aria-live="polite"><div class="in"><div class="msg" id="sheet-msg"></div><button class="btn" id="sheet-next" hidden>Next</button></div></div>
+
+<script>
+/* ============================== COURSE ============================== */
+const W=(t,r,en,e,alts=[])=>({t,r,en,e,alts});
+const S=(spec,en,alts=[],e='')=>{const w=spec.split(' / ').map(p=>p.split(':'));return{w,en,alts,e}};
+const L=(t,r,say,name='')=>({t,r,say:say||t,name});
+
+const COURSE={
+ ja:{name:'Japanese',bcp:'ja-JP',join:' ',levels:[
+  {title:'Hello & thank you',stage:'say',items:[
+    W('こんにちは','konnichiwa','Hello','👋',['今日は','こんにちわ']),
+    W('ありがとう','arigatō','Thank you','🙏',['有難う','ありがとうございます']),
+    W('はい','hai','Yes','✅',['ハイ','はーい']),
+    W('いいえ','iie','No','❌',['いえ']),
+    W('さようなら','sayōnara','Goodbye','🚶',['さよなら','さよーなら']),
+    W('おはよう','ohayō','Good morning','🌅',['お早う','おはようございます'])]},
+  {title:'Everyday things',stage:'say',items:[
+    W('みず','mizu','Water','💧',['水']),
+    W('ねこ','neko','Cat','🐱',['猫','ネコ']),
+    W('いぬ','inu','Dog','🐶',['犬','イヌ']),
+    W('ごはん','gohan','Rice / a meal','🍚',['ご飯','御飯']),
+    W('おちゃ','ocha','Tea','🍵',['お茶']),
+    W('ほん','hon','Book','📘',['本'])]},
+  {title:'First sentences',stage:'sent',items:[
+    S('これ:kore:this / は:wa:(topic) / ねこ:neko:cat / です:desu:is','This is a cat.',['これは猫です','これはネコです'],'🐱'),
+    S('みず:mizu:water / を:o:(object) / ください:kudasai:please give','Water, please.',['水をください','水を下さい','水ください'],'💧'),
+    S('いぬ:inu:dog / が:ga:(subject) / すき:suki:liked / です:desu:is','I like dogs.',['犬が好きです','イヌが好きです'],'🐶'),
+    S('おちゃ:ocha:tea / を:o:(object) / のみます:nomimasu:drink','I drink tea.',['お茶を飲みます','お茶飲みます'],'🍵'),
+    S('ほん:hon:book / を:o:(object) / よみます:yomimasu:read','I read a book.',['本を読みます','本読みます'],'📘'),
+    S('ねこ:neko:cat / は:wa:(topic) / どこ:doko:where / ですか:desu ka:is it?','Where is the cat?',['猫はどこですか','ネコはどこですか'],'🐱')]},
+  {title:'Letters あ い う え お ん',stage:'letters',items:[L('あ','a'),L('い','i'),L('う','u'),L('え','e'),L('お','o'),L('ん','n')]},
+  {title:'People',stage:'say',items:[
+    W('わたし','watashi','I / me','🙋',['私']),
+    W('あなた','anata','You','👉',['貴方']),
+    W('ともだち','tomodachi','Friend','🤝',['友達','友だち']),
+    W('おかあさん','okāsan','Mom','👩',['お母さん']),
+    W('おとうさん','otōsan','Dad','👨',['お父さん']),
+    W('せんせい','sensei','Teacher','🧑‍🏫',['先生'])]},
+  {title:'Letters か row & さ row',stage:'letters',items:[L('か','ka'),L('き','ki'),L('く','ku'),L('け','ke'),L('こ','ko'),L('さ','sa'),L('し','shi'),L('す','su'),L('せ','se'),L('そ','so')]},
+  {title:'Talking about people',stage:'sent',items:[
+    S('わたし:watashi:I / は:wa:(topic) / がくせい:gakusei:student / です:desu:am','I am a student.',['私は学生です'],'🎒'),
+    S('ともだち:tomodachi:friend / です:desu:is','It’s my friend.',['友達です','友だちです'],'🤝'),
+    S('せんせい:sensei:teacher / は:wa:(topic) / どこ:doko:where / ですか:desu ka:is?','Where is the teacher?',['先生はどこですか'],'🧑‍🏫'),
+    S('おかあさん:okāsan:mom / が:ga:(subject) / すき:suki:liked / です:desu:is','I love my mom.',['お母さんが好きです'],'👩'),
+    S('あなた:anata:you / は:wa:(topic)','And you?',['貴方は','あなたわ'],'👉')]},
+  {title:'Letters た row & な row',stage:'letters',items:[L('た','ta'),L('ち','chi'),L('つ','tsu'),L('て','te'),L('と','to'),L('な','na'),L('に','ni'),L('ぬ','nu'),L('ね','ne'),L('の','no')]},
+  {title:'Read & write: words you know',stage:'read',items:[]},
+  {title:'Food & drink',stage:'say',items:[
+    W('りんご','ringo','Apple','🍎',['林檎','リンゴ']),
+    W('さかな','sakana','Fish','🐟',['魚']),
+    W('たまご','tamago','Egg','🥚',['卵','玉子']),
+    W('おいしい','oishii','Delicious','😋',['美味しい']),
+    W('たべます','tabemasu','(I) eat','🍽️',['食べます']),
+    W('のみます','nomimasu','(I) drink','🥤',['飲みます'])]},
+  {title:'Letters は row & ま row',stage:'letters',items:[L('は','ha'),L('ひ','hi'),L('ふ','fu'),L('へ','he'),L('ほ','ho'),L('ま','ma'),L('み','mi'),L('む','mu'),L('め','me'),L('も','mo')]},
+  {title:'At the table',stage:'sent',items:[
+    S('りんご:ringo:apple / を:o:(object) / たべます:tabemasu:eat','I eat an apple.',['りんごを食べます','リンゴを食べます','林檎を食べます'],'🍎'),
+    S('さかな:sakana:fish / が:ga:(subject) / すき:suki:liked / です:desu:is','I like fish.',['魚が好きです'],'🐟'),
+    S('おいしい:oishii:delicious / です:desu:is','It’s delicious.',['美味しいです'],'😋'),
+    S('たまご:tamago:egg / を:o:(object) / ください:kudasai:please give','An egg, please.',['卵をください','卵を下さい','玉子をください'],'🥚'),
+    S('なに:nani:what / を:o:(object) / のみますか:nomimasu ka:drink?','What will you drink?',['何を飲みますか','なにを飲みますか'],'🥤')]},
+  {title:'Letters や ら わ rows',stage:'letters',items:[L('や','ya'),L('ゆ','yu'),L('よ','yo'),L('ら','ra'),L('り','ri'),L('る','ru'),L('れ','re'),L('ろ','ro'),L('わ','wa'),L('を','o (wo)','を')]},
+  {title:'Read & write: sentences',stage:'read',items:[]}
+ ]},
+ ko:{name:'Korean',bcp:'ko-KR',join:' ',levels:[
+  {title:'Hello & thank you',stage:'say',items:[
+    W('안녕하세요','annyeonghaseyo','Hello','👋'),
+    W('감사합니다','gamsahamnida','Thank you','🙏'),
+    W('네','ne','Yes','✅',['예','내']),
+    W('아니요','aniyo','No','❌',['아니오','아니']),
+    W('안녕히 가세요','annyeonghi gaseyo','Goodbye','🚶',['안녕히가세요']),
+    W('잘 자요','jal jayo','Good night','🌙',['잘자요'])]},
+  {title:'Everyday things',stage:'say',items:[
+    W('물','mul','Water','💧',['문','물을']),
+    W('고양이','goyangi','Cat','🐱'),
+    W('개','gae','Dog','🐶',['게','깨']),
+    W('밥','bap','Rice / a meal','🍚',['밖','밧']),
+    W('차','cha','Tea','🍵',['착']),
+    W('책','chaek','Book','📘',['채','책을'])]},
+  {title:'First sentences',stage:'sent',items:[
+    S('이것은:igeoseun:this (topic) / 고양이예요:goyangiyeyo:is a cat','This is a cat.',['이건 고양이예요','이것은 고양이에요'],'🐱'),
+    S('물:mul:water / 주세요:juseyo:please give','Water, please.',['물좀주세요'],'💧'),
+    S('개를:gaereul:dog (object) / 좋아해요:joahaeyo:like','I like dogs.',['개를 좋아해요','게를 좋아해요'],'🐶'),
+    S('차를:chareul:tea (object) / 마셔요:masyeoyo:drink','I drink tea.',['차를 마셔요'],'🍵'),
+    S('책을:chaegeul:book (object) / 읽어요:ilgeoyo:read','I read a book.',['책 읽어요'],'📘'),
+    S('고양이가:goyangiga:cat (subject) / 어디에:eodie:where / 있어요:isseoyo:is?','Where is the cat?',['고양이 어디 있어요','고양이가 어디 있어요'],'🐱')]},
+  {title:'Letters: vowels ㅏ ㅓ ㅗ ㅜ ㅡ ㅣ + ㅇ',stage:'letters',items:[L('ㅏ','a','아'),L('ㅓ','eo','어'),L('ㅗ','o','오'),L('ㅜ','u','우'),L('ㅡ','eu','으'),L('ㅣ','i','이'),L('ㅇ','silent / ng','이응','silent at the start, “ng” at the end')]},
+  {title:'People',stage:'say',items:[
+    W('저','jeo','I / me','🙋',['조','져']),
+    W('친구','chingu','Friend','🤝'),
+    W('엄마','eomma','Mom','👩'),
+    W('아빠','appa','Dad','👨',['아바']),
+    W('선생님','seonsaengnim','Teacher','🧑‍🏫'),
+    W('학생','haksaeng','Student','🎒')]},
+  {title:'Letters ㄱ ㄴ ㄷ ㄹ ㅁ',stage:'letters',items:[L('ㄱ','g / k','가','giyeok'),L('ㄴ','n','나','nieun'),L('ㄷ','d / t','다','digeut'),L('ㄹ','r / l','라','rieul'),L('ㅁ','m','마','mieum')]},
+  {title:'Talking about people',stage:'sent',items:[
+    S('저는:jeoneun:I (topic) / 학생이에요:haksaeng-ieyo:am a student','I am a student.',['전 학생이에요','저는 학생이예요'],'🎒'),
+    S('친구예요:chinguyeyo:is a friend','It’s my friend.',['친구에요'],'🤝'),
+    S('선생님이:seonsaengnimi:teacher (subject) / 어디에:eodie:where / 있어요:isseoyo:is?','Where is the teacher?',['선생님 어디 있어요','선생님이 어디 있어요'],'🧑‍🏫'),
+    S('엄마를:eommareul:mom (object) / 좋아해요:joahaeyo:like','I love my mom.',['엄마 좋아해요'],'👩'),
+    S('아빠는:appaneun:dad (topic) / 선생님이에요:seonsaengnim-ieyo:is a teacher','My dad is a teacher.',['아빠는 선생님이예요'],'👨')]},
+  {title:'Letters ㅂ ㅅ ㅈ ㅎ',stage:'letters',items:[L('ㅂ','b / p','바','bieup'),L('ㅅ','s','사','siot'),L('ㅈ','j','자','jieut'),L('ㅎ','h','하','hieut')]},
+  {title:'Read & write: words you know',stage:'read',items:[]},
+  {title:'Food & drink',stage:'say',items:[
+    W('사과','sagwa','Apple','🍎'),
+    W('생선','saengseon','Fish','🐟'),
+    W('계란','gyeran','Egg','🥚',['게란','개란']),
+    W('맛있어요','masisseoyo','It’s tasty','😋',['마시써요','맛있어']),
+    W('먹어요','meogeoyo','(I) eat','🍽️',['머거요']),
+    W('마셔요','masyeoyo','(I) drink','🥤',['마셔','마시어요'])]},
+  {title:'Letters ㅋ ㅌ ㅍ ㅊ and doubles',stage:'letters',items:[L('ㅋ','k (strong)','카','kieuk'),L('ㅌ','t (strong)','타','tieut'),L('ㅍ','p (strong)','파','pieup'),L('ㅊ','ch','차','chieut'),L('ㄲ','kk','까','ssang-giyeok'),L('ㄸ','tt','따','ssang-digeut'),L('ㅃ','pp','빠','ssang-bieup'),L('ㅆ','ss','싸','ssang-siot'),L('ㅉ','jj','짜','ssang-jieut')]},
+  {title:'At the table',stage:'sent',items:[
+    S('사과를:sagwareul:apple (object) / 먹어요:meogeoyo:eat','I eat an apple.',['사과 먹어요'],'🍎'),
+    S('생선을:saengseoneul:fish (object) / 좋아해요:joahaeyo:like','I like fish.',['생선 좋아해요'],'🐟'),
+    S('정말:jeongmal:really / 맛있어요:masisseoyo:is tasty','It’s really tasty.',['정말 맛있어요'],'😋'),
+    S('계란:gyeran:egg / 주세요:juseyo:please give','An egg, please.',['계란 주세요','게란 주세요'],'🥚'),
+    S('뭐:mwo:what / 마셔요:masyeoyo:drink?','What are you drinking?',['뭐 마셔요','뭘 마셔요'],'🥤')]},
+  {title:'Letters ㅐ ㅔ ㅑ ㅕ ㅛ ㅠ',stage:'letters',items:[L('ㅐ','ae','애'),L('ㅔ','e','에'),L('ㅑ','ya','야'),L('ㅕ','yeo','여'),L('ㅛ','yo','요'),L('ㅠ','yu','유')]},
+  {title:'Read & write: sentences',stage:'read',items:[]}
+ ]}
+};
+const STAGES={say:'Hear & say',sent:'Small sentences',letters:'Letters',read:'Read & write'};
+const STAGE_ORDER=['say','sent','letters','read'];
+
+// Flatten items
+const ITEMS={ja:{},ko:{}};
+for(const lang of ['ja','ko']){
+  COURSE[lang].levels.forEach((lv,li)=>{
+    lv.id=lang+li;
+    lv.items.forEach((it,ii)=>{
+      it.id=lv.id+'_'+ii; it.lvl=li; it.lang=lang;
+      it.kind=lv.stage==='say'?'word':lv.stage==='sent'?'sent':'letter';
+      if(it.kind==='sent'){ it.t=it.w.map(x=>x[0]).join(' '); it.r=it.w.map(x=>x[1]).join(' '); }
+      ITEMS[lang][it.id]=it;
+    });
+  });
+}
+
+/* ============================== SCRIPT HELPERS ============================== */
+const CHO='ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ', JUNG='ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ';
+const JONG=['','ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+const VCOMB={'ㅗㅏ':'ㅘ','ㅗㅐ':'ㅙ','ㅗㅣ':'ㅚ','ㅜㅓ':'ㅝ','ㅜㅔ':'ㅞ','ㅜㅣ':'ㅟ','ㅡㅣ':'ㅢ'};
+const FCOMB={'ㄱㅅ':'ㄳ','ㄴㅈ':'ㄵ','ㄴㅎ':'ㄶ','ㄹㄱ':'ㄺ','ㄹㅁ':'ㄻ','ㄹㅂ':'ㄼ','ㄹㅅ':'ㄽ','ㄹㅌ':'ㄾ','ㄹㅍ':'ㄿ','ㄹㅎ':'ㅀ','ㅂㅅ':'ㅄ'};
+const VSPLIT={},FSPLIT={};
+for(const k in VCOMB) VSPLIT[VCOMB[k]]=[...k];
+for(const k in FCOMB) FSPLIT[FCOMB[k]]=[...k];
+const READSPLIT={'ㅒ':['ㅑ','ㅣ'],'ㅖ':['ㅕ','ㅣ']};
+function hAtoms(ch){
+  const c=ch.charCodeAt(0)-0xAC00;
+  if(c<0||c>11171) return VSPLIT[ch]||FSPLIT[ch]||[ch];
+  const cho=CHO[Math.floor(c/588)], jung=JUNG[Math.floor((c%588)/28)], jong=JONG[c%28];
+  return [cho,...(VSPLIT[jung]||[jung]),...(jong?(FSPLIT[jong]||[jong]):[])];
+}
+function hCompose(tokens){
+  let out='',cho='',jung='',jong='';
+  const flush=()=>{ if(cho&&jung) out+=String.fromCharCode(0xAC00+(CHO.indexOf(cho)*21+JUNG.indexOf(jung))*28+JONG.indexOf(jong)); else out+=cho+jung+jong; cho=jung=jong=''; };
+  for(const t of tokens){
+    if(CHO.includes(t)){
+      if(cho&&jung){
+        if(!jong){ if(JONG.includes(t)) jong=t; else {flush();cho=t;} }
+        else { const f=FCOMB[jong+t]; if(f) jong=f; else {flush();cho=t;} }
+      } else { flush(); cho=t; }
+    } else if(JUNG.includes(t)){
+      if(jong){ let keep='',move=jong; if(FSPLIT[jong]) [keep,move]=FSPLIT[jong]; jong=keep; flush(); cho=move; jung=t; }
+      else if(jung){ const v=VCOMB[jung+t]; if(v) jung=v; else {flush(); jung=t;} }
+      else jung=t;
+    } else { flush(); out+=t; }
+  }
+  flush(); return out;
+}
+const DUBEOL={q:'ㅂ',w:'ㅈ',e:'ㄷ',r:'ㄱ',t:'ㅅ',y:'ㅛ',u:'ㅕ',i:'ㅑ',o:'ㅐ',p:'ㅔ',a:'ㅁ',s:'ㄴ',d:'ㅇ',f:'ㄹ',g:'ㅎ',h:'ㅗ',j:'ㅓ',k:'ㅏ',l:'ㅣ',z:'ㅋ',x:'ㅌ',c:'ㅊ',v:'ㅍ',b:'ㅠ',n:'ㅜ',m:'ㅡ',Q:'ㅃ',W:'ㅉ',E:'ㄸ',R:'ㄲ',T:'ㅆ',O:'ㅒ',P:'ㅖ'};
+const KEYOF={}; for(const k in DUBEOL) KEYOF[DUBEOL[k]]=(k===k.toUpperCase()?'⇧'+k.toLowerCase():k);
+function koConvert(str){
+  const toks=[];
+  for(const ch of str){
+    if(/[A-Za-z]/.test(ch)){ const j=DUBEOL[ch]||DUBEOL[ch.toLowerCase()]; if(j) toks.push(j); }
+    else if(/[가-힣ㄱ-ㆎ]/.test(ch)) toks.push(...hAtoms(ch));
+    else toks.push(ch);
+  }
+  return hCompose(toks);
+}
+function koBackspace(str){
+  const toks=[]; for(const ch of str){ if(/[가-힣ㄱ-ㆎ]/.test(ch)) toks.push(...hAtoms(ch)); else toks.push(ch); }
+  toks.pop(); return hCompose(toks);
+}
+
+// Romaji -> hiragana
+const ROMA=(()=>{
+  const m={a:'あ',i:'い',u:'う',e:'え',o:'お','-':'ー',nn:'ん',"n'":'ん'};
+  const rows={k:'かきくけこ',g:'がぎぐげご',s:'さしすせそ',z:'ざじずぜぞ',t:'たちつてと',d:'だぢづでど',n:'なにぬねの',h:'はひふへほ',b:'ばびぶべぼ',p:'ぱぴぷぺぽ',m:'まみむめも',r:'らりるれろ'};
+  const V='aiueo';
+  for(const c in rows) [...rows[c]].forEach((k,i)=>m[c+V[i]]=k);
+  Object.assign(m,{ya:'や',yu:'ゆ',yo:'よ',wa:'わ',wo:'を',shi:'し',chi:'ち',tsu:'つ',fu:'ふ',ji:'じ',si:'し',ti:'ち',tu:'つ',hu:'ふ',zi:'じ',xa:'ぁ',xi:'ぃ',xu:'ぅ',xe:'ぇ',xo:'ぉ',la:'ぁ',li:'ぃ',lu:'ぅ',le:'ぇ',lo:'ぉ',xya:'ゃ',xyu:'ゅ',xyo:'ょ',lya:'ゃ',lyu:'ゅ',lyo:'ょ',xtu:'っ',ltu:'っ'});
+  const y={k:'き',g:'ぎ',n:'に',h:'ひ',b:'び',p:'ぴ',m:'み',r:'り'};
+  for(const c in y){ m[c+'ya']=y[c]+'ゃ'; m[c+'yu']=y[c]+'ゅ'; m[c+'yo']=y[c]+'ょ'; }
+  Object.assign(m,{sha:'しゃ',shu:'しゅ',sho:'しょ',sya:'しゃ',syu:'しゅ',syo:'しょ',cha:'ちゃ',chu:'ちゅ',cho:'ちょ',tya:'ちゃ',tyu:'ちゅ',tyo:'ちょ',ja:'じゃ',ju:'じゅ',jo:'じょ',jya:'じゃ',jyu:'じゅ',jyo:'じょ',zya:'じゃ',zyu:'じゅ',zyo:'じょ',she:'しぇ',che:'ちぇ',je:'じぇ'});
+  return m;
+})();
+function jaConvert(str,final){
+  let out='',i=0; str=str.replace(/[A-Z]/g,c=>c.toLowerCase());
+  while(i<str.length){
+    const c=str[i];
+    if(!/[a-z'\-]/.test(c)){ out+=c; i++; continue; }
+    if(c==='n'){
+      const nx=str[i+1];
+      if(nx===undefined){ out+=final?'ん':'n'; i++; continue; }
+      if(nx==="'"){ out+='ん'; i+=2; continue; }
+      if(nx==='n'){ out+='ん'; i+=/[aiueoy]/.test(str[i+2]||'')?1:2; continue; }
+      if(!/[aiueoy]/.test(nx)){ out+='ん'; i++; continue; }
+    }
+    if(c===str[i+1] && /[bcdfghjkmpqrstvwxz]/.test(c)){ out+='っ'; i++; continue; }
+    let hit=false;
+    for(const len of [3,2,1]){ const sub=str.substr(i,len); if(ROMA[sub]){ out+=ROMA[sub]; i+=len; hit=true; break; } }
+    if(!hit){ out+=c; i++; }
+  }
+  return out;
+}
+const SMALL={'ぁ':'あ','ぃ':'い','ぅ':'う','ぇ':'え','ぉ':'お','っ':'つ','ゃ':'や','ゅ':'ゆ','ょ':'よ','ゎ':'わ'};
+function kata2hira(s){ return s.replace(/[ァ-ヶ]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60)); }
+function readUnits(lang,text){
+  const clean=text.replace(/[\s。、？！?!.,ー]/g,'');
+  if(lang==='ja') return [...clean].map(c=>SMALL[c]||c.normalize('NFD')[0]);
+  return [...clean].flatMap(hAtoms).flatMap(a=>READSPLIT[a]||[a]);
+}
+function norm(lang,s){
+  s=(s||'').toLowerCase().replace(/[\s。、．，,.!?！？・〜~「」"'ー-]/g,'');
+  if(lang==='ja'){ s=kata2hira(s).replace(/は/g,'わ').replace(/を/g,'お').replace(/へ/g,'え'); }
+  return s;
+}
+function lev(a,b){ a=[...a];b=[...b]; const d=Array.from({length:a.length+1},(_,i)=>[i]); for(let j=1;j<=b.length;j++) d[0][j]=j;
+  for(let i=1;i<=a.length;i++) for(let j=1;j<=b.length;j++) d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+  return d[a.length][b.length]; }
+function sim(lang,heard,item){
+  const h=norm(lang,heard); if(!h) return 0;
+  let best=0;
+  for(const t of [item.t,...(item.alts||[])]){ const n=norm(lang,t); const s=1-lev(h,n)/Math.max(h.length,n.length); if(s>best) best=s; }
+  return best;
+}
+
+/* ============================== STATE ============================== */
+const KEY='say-it-first.v1';
+const BOX_HOURS=[0,0.17,24,72,168,384,840,2000];
+function fresh(){ return {v:1,lang:'ja',updatedAt:0,streak:{count:0,last:''},langs:{ja:{level:0,items:{},xp:0},ko:{level:0,items:{},xp:0}}}; }
+let state=fresh();
+try{ const raw=localStorage.getItem(KEY); if(raw){ const s=JSON.parse(raw); if(s&&s.v===1) state=Object.assign(fresh(),s); } }catch(e){}
+let dbDoc=null, saveTimer=null;
+function save(){
+  state.updatedAt=Date.now();
+  try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){}
+  if(dbDoc){ clearTimeout(saveTimer); saveTimer=setTimeout(()=>{ dbDoc.set({json:JSON.stringify(state),updatedAt:state.updatedAt}).catch(()=>{}); },800); }
+}
+(async()=>{ // sync progress across devices when the page runs inside Claude
+  try{
+    if(!window.claude||!claude.use) return;
+    const [db,user]=await Promise.all([claude.use('db'),claude.use('user')]);
+    if(!db||!user) return; const id=await user.id(); if(!id) return;
+    dbDoc=db.doc('data/users/'+id+'/progress');
+    const snap=await dbDoc.get();
+    if(snap.exists){ const d=snap.data(); if(d&&d.updatedAt>state.updatedAt){ const s=JSON.parse(d.json); if(s&&s.v===1){ state=Object.assign(fresh(),s); try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){} if(view==='home') renderHome(); } } }
+    else if(state.updatedAt) save();
+  }catch(e){}
+})();
+const P=()=>state.langs[state.lang];
+const LV=()=>COURSE[state.lang].levels;
+function srs(id){ const p=P(); return p.items[id]||(p.items[id]={box:0,due:0,ok:0,bad:0}); }
+function grade(id,ok){ const s=srs(id); if(ok){ s.box=Math.min(s.box+1,BOX_HOURS.length-1); s.ok++; } else { s.box=1; s.bad++; } s.due=Date.now()+BOX_HOURS[s.box]*3600e3; }
+function touchStreak(){ const today=new Date().toISOString().slice(0,10); const st=state.streak; if(st.last===today) return; const y=new Date(Date.now()-864e5).toISOString().slice(0,10); st.count=st.last===y?st.count+1:1; st.last=today; }
+
+/* ============================== LEARNING HELPERS ============================== */
+let session=null, view='home';
+function learnedLetters(lang=state.lang){
+  const s=new Set(), p=state.langs[lang].level;
+  COURSE[lang].levels.forEach((lv,i)=>{ if(lv.stage==='letters'&&i<p) lv.items.forEach(it=>s.add(it.t)); });
+  if(session&&session.lang===lang) session.introduced.forEach(c=>s.add(c));
+  return s;
+}
+function canRead(item,lang=state.lang){ if(item.kind==='letter') return true; const s=learnedLetters(lang); return readUnits(lang,item.t).every(u=>s.has(u)); }
+function knownItems(kinds,maxLevel){ // items from levels the learner has reached
+  const lim=maxLevel??P().level;
+  return Object.values(ITEMS[state.lang]).filter(it=>kinds.includes(it.kind)&&it.lvl<=lim&&(it.lvl<P().level||(session&&session.seen.has(it.id))));
+}
+function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function pickDistractors(item,n){
+  let pool=Object.values(ITEMS[item.lang]).filter(x=>x.kind===item.kind&&x.id!==item.id&&x.en!==item.en&&x.t!==item.t);
+  const near=pool.filter(x=>x.lvl<=Math.max(item.lvl,P().level));
+  pool=near.length>=n?near:pool;
+  return shuffle(pool).slice(0,n);
+}
+function dueReviews(n){
+  const now=Date.now(), p=P();
+  return Object.entries(p.items).filter(([id,s])=>s.box>0&&s.due<=now&&ITEMS[state.lang][id]&&ITEMS[state.lang][id].lvl<p.level)
+    .sort((a,b)=>a[1].due-b[1].due).slice(0,n).map(([id])=>ITEMS[state.lang][id]);
+}
+function reviewType(it){
+  if(it.kind==='letter') return Math.random()<.5?'pick':'trace';
+  const opts=it.kind==='sent'?['speak','build','choose']:['speak','choose'];
+  if(canRead(it)) opts.push('read','type','read');
+  return opts[Math.floor(Math.random()*opts.length)];
+}
+const E=(type,item,extra={})=>({type,id:item.id,...extra});
+function buildQueue(li){
+  const lv=LV()[li], items=lv.items, q=[];
+  if(lv.stage==='say'){
+    items.forEach((it,i)=>{ q.push(E('intro',it),E('speak',it)); if(i>0) q.push(E('choose',items[i-1])); });
+    q.push(E('choose',items[items.length-1]));
+    shuffle(items).forEach((it,i)=>q.push(E(i%2?'choose':'speak',it)));
+  } else if(lv.stage==='sent'){
+    items.forEach((it,i)=>{ q.push(E('intro',it),E('speak',it)); if(i>0) q.push(E('build',items[i-1])); });
+    q.push(E('build',items[items.length-1]));
+    shuffle(items).forEach((it,i)=>q.push(E(i%2?'choose':'speak',it)));
+  } else if(lv.stage==='letters'){
+    items.forEach((it,i)=>{ q.push(E('lintro',it),E('trace',it)); if(i>0) q.push(E('pick',items[i-1])); });
+    q.push(E('pick',items[items.length-1]));
+    shuffle(items).forEach(it=>q.push(E('trace',it,{memory:true})));
+    q.push({type:'readnew'}); // placeholder: becomes read exercises for words that just became readable
+  } else { // read & write
+    const pool=Object.values(ITEMS[state.lang]).filter(it=>it.lvl<li&&it.kind!=='letter');
+    const sents=shuffle(pool.filter(x=>x.kind==='sent')), words=shuffle(pool.filter(x=>x.kind==='word'));
+    const picks=(li>=LV().length-1?[...sents.slice(0,6),...words.slice(0,3)]:[...words.slice(0,6),...sents.slice(0,3)]);
+    picks.forEach(it=>{ q.push(E('read',it),E('type',it)); });
+    shuffle(picks).slice(0,4).forEach(it=>q.push(E('speak',it,{fromScript:true})));
+  }
+  const rev=dueReviews(lv.stage==='read'?3:5);
+  rev.forEach((it,i)=>{ const pos=Math.min(q.length,Math.round((i+1)*q.length/(rev.length+1))+i); q.splice(pos,0,E(reviewType(it),it,{review:true})); });
+  return q;
+}
+function readableKnown(lang){ return Object.values(ITEMS[lang]).filter(it=>it.kind!=='letter'&&it.lvl<state.langs[lang].level&&canRead(it,lang)); }
+
+/* ============================== AUDIO ============================== */
+let voices=[];
+function loadVoices(){ try{ voices=speechSynthesis.getVoices(); }catch(e){} }
+if('speechSynthesis' in window){ loadVoices(); speechSynthesis.onvoiceschanged=loadVoices; }
+function voiceFor(bcp){ const pre=bcp.slice(0,2); const vs=voices.filter(v=>v.lang&&v.lang.replace('_','-').toLowerCase().startsWith(pre)); return vs.find(v=>/google|natural|premium|enhanced|siri/i.test(v.name))||vs.find(v=>v.lang.replace('_','-')===bcp)||vs[0]||null; }
+let audioWarned=false;
+function audioHelp(reason){
+  if(audioWarned) return; audioWarned=true;
+  const t=document.createElement('div'); t.className='toast'; t.setAttribute('role','status');
+  t.innerHTML=(reason==='none'?'<b>This screen can\u2019t play speech.</b> Open Cub Talk in Safari or Chrome to hear the audio.'
+    :'<b>No sound came out.</b> Check that your phone isn\u2019t on silent (iPhone: the switch on the side) and the volume is up. If it still stays quiet, your phone may need a '+COURSE[state.lang].name+' voice: on iPhone go to Settings \u203a Accessibility \u203a Spoken Content \u203a Voices; on Android, Settings \u203a Text-to-speech.')+'<button class="iconbtn" aria-label="Close">\u2715</button>';
+  t.querySelector('button').onclick=()=>t.remove();
+  document.body.appendChild(t);
+}
+function say(text,{lang=state.lang,slow=false,en=false}={}){
+  return new Promise(res=>{
+    if(!('speechSynthesis' in window)||!window.SpeechSynthesisUtterance){ audioHelp('none'); res(); return; }
+    const ss=window.speechSynthesis;
+    if(!voices.length) loadVoices();
+    const bcp=en?'en-US':COURSE[lang].bcp;
+    if(!en&&lang==='ja') text=text.replace(/\s+/g,'');
+    const u=new SpeechSynthesisUtterance(text); u.lang=bcp; const v=voiceFor(bcp); if(v) u.voice=v;
+    u.rate=en?1:(slow?0.62:0.9); u.volume=1;
+    let done=false, started=false, ended=false; const fin=()=>{ if(!done){done=true;res();} };
+    u.onstart=()=>{ started=true; }; u.onend=()=>{ ended=true; fin(); }; u.onerror=e=>{ if(e&&e.error==='not-allowed') audioHelp('quiet'); fin(); };
+    setTimeout(fin,1500+text.length*450);
+    setTimeout(()=>{ if(!started&&!ended&&!ss.speaking) audioHelp('quiet'); },1600);
+    try{ ss.resume(); }catch(e){}
+    // Cancelling right before speaking swallows the utterance on iPhone and some Android phones,
+    // so only cancel when something is actually playing, and speak in the same tap otherwise.
+    if(ss.speaking||ss.pending){ ss.cancel(); setTimeout(()=>ss.speak(u),80); }
+    else ss.speak(u);
+  });
+}
+const sayItem=(it,slow)=>say(it.kind==='letter'?it.say:it.t,{lang:it.lang,slow});
+let actx=null;
+function beep(freq=880,ms=140,vol=.15){ try{ actx=actx||new (window.AudioContext||window.webkitAudioContext)(); const o=actx.createOscillator(),g=actx.createGain(); o.frequency.value=freq; o.type='sine'; g.gain.value=vol; o.connect(g); g.connect(actx.destination); const t=actx.currentTime; g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.0001,t+ms/1000); o.start(t); o.stop(t+ms/1000+.02); }catch(e){} }
+
+/* ============================== MIC ============================== */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const mic={blocked:!SR,noRecord:false,current:null};
+async function listen(lang,{maxMs=7000,record=true}={}){
+  if(mic.blocked) return {unavailable:true};
+  let stream=null,rec=null,chunks=[];
+  if(record&&!mic.noRecord&&navigator.mediaDevices&&window.MediaRecorder){
+    try{ stream=await navigator.mediaDevices.getUserMedia({audio:true}); rec=new MediaRecorder(stream); rec.ondataavailable=e=>e.data.size&&chunks.push(e.data); rec.start(); }catch(e){ stream=null; rec=null; if(e&&e.name==='NotAllowedError'){ mic.blocked=true; return {unavailable:true}; } }
+  }
+  return new Promise(resolve=>{
+    const r=new SR(); r.lang=COURSE[lang].bcp; r.interimResults=false; r.maxAlternatives=5; r.continuous=false;
+    const results=[]; let err=null, ended=false;
+    r.onresult=e=>{ for(const res of Array.from(e.results)) for(const alt of Array.from(res)) results.push(alt.transcript); };
+    r.onerror=e=>{ err=e.error; };
+    const timer=setTimeout(()=>{ try{r.stop();}catch(e){} },maxMs);
+    r.onend=()=>{
+      if(ended) return; ended=true; clearTimeout(timer); mic.current=null;
+      if(err==='not-allowed'||err==='service-not-allowed') mic.blocked=true;
+      if(err==='audio-capture'&&stream) mic.noRecord=true;
+      const finish=url=>{ if(stream) stream.getTracks().forEach(t=>t.stop()); resolve({results,err,url,unavailable:mic.blocked}); };
+      if(rec&&rec.state!=='inactive'){ rec.onstop=()=>finish(chunks.length?URL.createObjectURL(new Blob(chunks,{type:rec.mimeType||'audio/webm'})):null); rec.stop(); } else finish(null);
+    };
+    mic.current=r;
+    try{ r.start(); }catch(e){ err='start'; r.onend(); }
+  });
+}
+function stopListening(){ if(mic.current) try{ mic.current.stop(); }catch(e){} }
+
+/* ============================== BEAR ============================== */
+const RANKS=[{name:'Cub',min:0},{name:'Yearling',min:4},{name:'Young bear',min:8},{name:'Big bear',min:12},{name:'Grizzly',min:14}];
+function rankOf(level){ let r=0; RANKS.forEach((x,i)=>{ if(level>=x.min) r=i; }); return r; }
+function bearSVG(px,{happy=false,pot=false,cls=''}={}){
+  const eyes=happy?'<path d="M31 53q5-6 10 0M59 53q5-6 10 0" fill="none" stroke="var(--nose)" stroke-width="3" stroke-linecap="round"/>'
+    :'<circle cx="36" cy="52" r="4.2" fill="var(--nose)"/><circle cx="64" cy="52" r="4.2" fill="var(--nose)"/><circle cx="37.4" cy="50.6" r="1.4" fill="#fff"/><circle cx="65.4" cy="50.6" r="1.4" fill="#fff"/>';
+  const honey=pot?'<g transform="translate(92 74)"><path d="M2 8h20l-2 16H4z" fill="var(--honey)"/><rect x="0" y="4" width="24" height="5" rx="2.5" fill="var(--nose)"/><path d="M8 11q0 6 3 6" stroke="#fff" stroke-opacity=".6" stroke-width="2" fill="none" stroke-linecap="round"/></g>':'';
+  return `<svg class="bear ${cls}" width="${px}" height="${px}" viewBox="0 0 ${pot?118:100} 100" role="img" aria-label="Bear cub"><circle cx="24" cy="27" r="15" fill="var(--fur)"/><circle cx="76" cy="27" r="15" fill="var(--fur)"/><circle cx="24" cy="27" r="8" fill="var(--fur-2)"/><circle cx="76" cy="27" r="8" fill="var(--fur-2)"/><ellipse cx="50" cy="57" rx="38" ry="34" fill="var(--fur)"/><circle cx="27" cy="65" r="5" fill="var(--honey)" opacity=".35"/><circle cx="73" cy="65" r="5" fill="var(--honey)" opacity=".35"/><ellipse cx="50" cy="69" rx="17" ry="13" fill="var(--fur-2)"/>${eyes}<ellipse cx="50" cy="63" rx="6.5" ry="4.8" fill="var(--nose)"/><path d="M50 67q0 6-5 7M50 67q0 6 5 7" fill="none" stroke="var(--nose)" stroke-width="2" stroke-linecap="round"/>${honey}</svg>`;
+}
+const PAW='<svg class="paw" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="16" rx="5.5" ry="4.5"/><circle cx="5.5" cy="10" r="2.3"/><circle cx="9.5" cy="6.2" r="2.3"/><circle cx="14.5" cy="6.2" r="2.3"/><circle cx="18.5" cy="10" r="2.3"/></svg>';
+
+/* ============================== UI HELPERS ============================== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ICON={
+  play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>',
+  slow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 17h14a3 3 0 0 0 3-3c0-4-4-7-8.5-7S4 10 4 14v3zM7 17v2M16 17v2M21 12l1.5-.5"/></svg>',
+  mic:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11h-2z"/></svg>',
+  stop:'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  car:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 11l1.6-4.2A2 2 0 0 1 8.5 5.5h7a2 2 0 0 1 1.9 1.3L19 11M4 11h16v6H4zM6 17v2M18 17v2"/><circle cx="7.5" cy="14" r="1" fill="currentColor"/><circle cx="16.5" cy="14" r="1" fill="currentColor"/></svg>',
+  me:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6z"/></svg>'
+};
+const playBtns=(it)=>`<button class="iconbtn" data-play aria-label="Play">${ICON.play}</button><button class="iconbtn" data-slow aria-label="Play slowly">${ICON.slow}</button>`;
+function wirePlay(root,it){ root.querySelectorAll('[data-play]').forEach(b=>b.onclick=()=>sayItem(it)); root.querySelectorAll('[data-slow]').forEach(b=>b.onclick=()=>sayItem(it,true)); }
+function pronHTML(it){ return canRead(it)?`<span class="pron nat">${esc(it.t)}</span>`:`<span class="pron">${esc(it.r)}</span>`; }
+function tileHTML(w,readable,cls=''){ return `<span class="tile ${cls}"><span class="w ${readable?'nat':''}">${esc(readable?w[0]:w[1])}</span><span class="g">${esc(w[2])}</span></span>`; }
+
+function renderStats(){
+  const p=P();
+  $('#stats').innerHTML=`<span>${PAW} <b>${state.streak.count}</b> day streak</span><span><b>${p.xp}</b> honey</span>`;
+  document.getElementById('app').dataset.lang=state.lang;
+  ['ja','ko'].forEach(l=>$('#lang-'+l).setAttribute('aria-pressed',String(state.lang===l)));
+}
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{
+  // Works from any screen: leave the current lesson and open the other language's path.
+  if(b.dataset.lang===state.lang&&view==='home') return;
+  if(window.speechSynthesis) speechSynthesis.cancel();
+  stopListening();
+  state.lang=b.dataset.lang; save(); renderHome();
+  const h=document.querySelector('.hero'); if(h) h.classList.add('switched');
+  say(state.lang==='ja'?'こんにちは':'안녕하세요');
+});
+
+/* ============================== HOME ============================== */
+function renderHome(){
+  view='home'; session=null; hideSheet(); renderStats();
+  const lvls=LV(), cur=P().level, finished=cur>=lvls.length;
+  const next=finished?null:lvls[cur];
+  const due=Object.values(P().items).filter(s=>s.box>0&&s.due<=Date.now()).length;
+  const curStage=next?next.stage:'read';
+  const rk=rankOf(cur), nextRank=RANKS[rk+1];
+  let html=`<section class="hero">
+    <div class="hero-head"><div class="lang-title"><span class="nat">${state.lang==='ja'?'日本語':'한국어'}</span> ${COURSE[state.lang].name}</div><div class="eyebrow">${finished?'Path complete':'Level '+(cur+1)+' of '+lvls.length}</div>
+    <h2>${finished?'Keep it fresh with mixed review':esc(next.title)}</h2>
+    <div class="rank">${PAW} ${RANKS[rk].name}${nextRank?` <span class="muted" style="font-weight:500">· ${nextRank.min-cur} level${nextRank.min-cur>1?'s':''} to ${nextRank.name}</span>`:''}</div></div>
+    <div class="hero-bear"><div class="bubble nat">${state.lang==='ja'?'こんにちは！':'안녕하세요!'}</div>${bearSVG(64+rk*10,{pot:rk>=2})}</div>
+    <div class="muted small">${finished?'Every level is done. Mixed review keeps the words coming back before you forget them.':STAGES[next.stage]+(due?` · ${due} review${due>1?'s':''} will be mixed in`:'')}</div>
+    <div class="hero-row">
+      <button class="btn" id="go">${finished?'Start mixed review':cur===0&&!Object.keys(P().items).length?'Start level 1':'Continue level '+(cur+1)}</button>
+      <button class="btn ghost" id="drive">${ICON.car} Drive mode · 15 min</button>
+    </div>
+  </section>
+  <div class="method" aria-label="How the path works">${STAGE_ORDER.map(s=>`<div class="${s===curStage?'on':''}">${STAGES[s]}</div>`).join('')}</div>
+  <div class="path">`;
+  let lastStage='';
+  lvls.forEach((lv,i)=>{
+    const st=i<cur?'done':i===cur?'current':'locked';
+    if(lv.stage!==lastStage){ html+=`<div class="stage-label">${STAGES[lv.stage]}</div>`; lastStage=lv.stage; }
+    const sub=lv.stage==='letters'?`${lv.items.length} letters`:lv.stage==='read'?'Read and type what you already say':`${lv.items.length} ${lv.stage==='sent'?'sentences':'words'}`;
+    html+=`<button class="node ${st}" data-level="${i}" ${st==='locked'?'disabled':''}><span class="dot">${st==='done'?PAW:i+1}</span><span><span class="t">${esc(lv.title)}</span><br><span class="s">${st==='done'?'Done · tap to practise again':sub}</span></span></button>`;
+  });
+  html+=`</div><p class="note">The path follows how children learn: you hear and repeat words first, then build small sentences, then learn the letters for words you already know. Words switch from romanization to ${state.lang==='ja'?'hiragana':'Hangul'} as soon as you've learned their letters. Finishing a level opens the next one straight away, and your cub grows from Cub to Yearling, Young bear, Big bear and finally Grizzly as you go.${mic.blocked?' <br><br><b>Mic check is off in this view.</b> Speaking steps fall back to “say it out loud and compare by ear”. Open the downloaded app file in Chrome, Edge or Safari to have your answers checked by the mic.':''}</p>`;
+  $('#view').innerHTML=html;
+  $('#go').onclick=()=>finished?startReview():startLevel(cur);
+  $('#drive').onclick=openDrive;
+  document.querySelectorAll('.node[data-level]').forEach(b=>b.onclick=()=>startLevel(+b.dataset.level));
+  window.scrollTo(0,0);
+}
+
+/* ============================== LESSON ENGINE ============================== */
+function startLevel(li){
+  hideSheet();
+  session={lang:state.lang,level:li,queue:[],done:0,attempts:0,firstOk:0,result:{},introduced:new Set(),seen:new Set(),review:false,readableBefore:readableKnown(state.lang).length};
+  session.queue=buildQueue(li);
+  view='lesson'; next();
+}
+function startReview(){
+  hideSheet();
+  const all=Object.values(ITEMS[state.lang]);
+  const its=shuffle(all).sort((a,b)=>(srs(a.id).due-srs(b.id).due)).slice(0,12);
+  session={lang:state.lang,level:-1,queue:its.map(it=>E(reviewType(it),it,{review:true})),done:0,attempts:0,firstOk:0,result:{},introduced:new Set(),seen:new Set(),review:true,readableBefore:0};
+  view='lesson'; next();
+}
+function next(){
+  hideSheet(); stopListening();
+  if(!session) return;
+  let ex=session.queue.shift();
+  if(ex&&ex.type==='readnew'){ // words that just became readable
+    const fresh=Object.values(ITEMS[state.lang]).filter(it=>it.kind!=='letter'&&it.lvl<session.level&&canRead(it)).filter(it=>!readUnits(state.lang,it.t).every(u=>learnedLettersBefore().has(u)));
+    shuffle(fresh).slice(0,4).forEach(it=>session.queue.push(E('read',it)));
+    ex=session.queue.shift();
+  }
+  if(!ex){ finishLesson(); return; }
+  session.cur=ex; session.tries=0;
+  const it=ITEMS[state.lang][ex.id];
+  session.seen.add(it.id);
+  if(it.kind==='letter'&&(ex.type==='lintro')) session.introduced.add(it.t);
+  renderLesson(ex,it);
+}
+function learnedLettersBefore(){ const s=new Set(); COURSE[state.lang].levels.forEach((lv,i)=>{ if(lv.stage==='letters'&&i<session.level) lv.items.forEach(x=>s.add(x.t)); }); return s; }
+function progressPct(){ return Math.round(100*session.done/Math.max(1,session.done+session.queue.length+1)); }
+function shell(inner){
+  $('#view').innerHTML=`<div class="lbar"><button class="close" id="quit" aria-label="Back to the path">${ICON.x}</button><div class="prog"><i style="width:${progressPct()}%"></i></div></div><section class="card" id="card">${inner}</section>`;
+  $('#quit').onclick=()=>{ window.speechSynthesis&&speechSynthesis.cancel(); stopListening(); save(); renderHome(); };
+  return $('#card');
+}
+function answer(ok,reveal,{auto=true}={}){
+  const ex=session.cur, it=ITEMS[state.lang][ex.id];
+  if(session.tries===0){ session.attempts++; if(ok) session.firstOk++; }
+  session.tries++;
+  if(it.kind!=='letter'||ex.type!=='lintro') session.result[it.id]=(session.result[it.id]!==false)&&ok;
+  if(ok){
+    session.done++; P().xp+=10;
+    showSheet('good',['Nice.','Yes!','Good ear.','Right.','That’s it.','Beary good.'][Math.floor(Math.random()*6)],reveal||'');
+    if(auto) setTimeout(()=>{ if(session&&session.cur===ex) next(); },950);
+  } else {
+    session.queue.splice(Math.min(2,session.queue.length),0,{...ex}); session.done++;
+    showSheet('bad','Not quite',reveal,true);
+    sayItem(it);
+  }
+}
+function showSheet(kind,title,body,withNext){
+  const s=$('#sheet'); s.className='sheet show '+kind;
+  $('#sheet-msg').innerHTML=`<b>${esc(title)}</b>${body?`<div class="ans">${body}</div>`:''}`;
+  const n=$('#sheet-next'); n.hidden=!withNext; n.onclick=()=>next();
+  if(withNext) n.focus();
+}
+function hideSheet(){ $('#sheet').className='sheet'; }
+function correctLine(it){ return it.kind==='letter'?`<span class="nat">${esc(it.t)}</span> · ${esc(it.r)}`:`<span class="nat">${canRead(it)?esc(it.t):esc(it.r)}</span> · ${esc(it.en)}`; }
+
+function renderLesson(ex,it){
+  const R={intro:exIntro,speak:exSpeak,choose:exChoose,build:exBuild,read:exRead,type:exType,lintro:exLetterIntro,pick:exPick,trace:exTrace}[ex.type];
+  R(ex,it);
+  window.scrollTo(0,0);
+}
+
+/* ---------- exercises ---------- */
+function exIntro(ex,it){
+  const c=shell(it.kind==='sent'?`
+    <div class="kind">New sentence</div>
+    <div class="prompt">${esc(it.en)}</div>
+    <div class="gloss">${it.w.map(w=>tileHTML(w,canRead({...it,t:w[0]}))).join('')}</div>
+    <div class="say-row">${playBtns(it)}</div>
+    <button class="btn wide" id="ok">Next</button>`:`
+    <div class="kind">New word</div>
+    <div class="pic" aria-hidden="true">${it.e}</div>
+    <div class="prompt">${esc(it.en)}</div>
+    <div class="say-row">${pronHTML(it)} ${playBtns(it)}</div>
+    <button class="btn wide" id="ok">Next</button>`);
+  wirePlay(c,it);
+  if(it.kind==='sent') c.querySelectorAll('.gloss .tile').forEach((t,i)=>t.onclick=()=>say(it.w[i][0]));
+  sayItem(it).then(()=>new Promise(r=>setTimeout(r,500))).then(()=>{ if(session&&session.cur===ex) sayItem(it,true); });
+  $('#ok').onclick=()=>{ session.done++; next(); };
+}
+function exSpeak(ex,it){
+  const fromScript=ex.fromScript&&canRead(it);
+  const c=shell(`
+    <div class="kind">${fromScript?'Read it out loud':'Listen and repeat'}</div>
+    ${fromScript?`<div class="big-nat">${esc(it.t)}</div>`:`${it.e?`<div class="pic" aria-hidden="true">${it.e}</div>`:''}<div class="prompt">${esc(it.en)}</div><div class="say-row">${pronHTML(it)} ${playBtns(it)}</div>`}
+    <div id="spk"></div>`);
+  wirePlay(c,it);
+  const area=$('#spk');
+  const selfCheck=()=>{
+    area.innerHTML=`<p class="tinfo">Say it out loud, then compare with the native audio.</p>
+      <div class="row">${fromScript?`<button class="iconbtn" id="hear">${ICON.play} Hear it</button>`:''}<button class="btn" id="said">I said it</button></div>`;
+    if(fromScript) $('#hear').onclick=()=>sayItem(it);
+    $('#said').onclick=()=>answer(true,correctLine(it));
+  };
+  const idle=(msg='')=>{
+    if(mic.blocked){ selfCheck(); return; }
+    area.innerHTML=`<button class="mic" id="micbtn" aria-label="Start speaking">${ICON.mic}</button><p class="tinfo" id="mtxt">${msg||'Tap the mic and say it.'}</p>`;
+    $('#micbtn').onclick=go;
+  };
+  async function go(){
+    const b=$('#micbtn'); b.classList.add('on'); b.innerHTML=ICON.stop; b.setAttribute('aria-label','Stop'); $('#mtxt').textContent='Listening…';
+    b.onclick=stopListening;
+    if('speechSynthesis' in window) speechSynthesis.cancel();
+    const r=await listen(it.lang);
+    if(!session||session.cur!==ex) return;
+    if(r.unavailable){ selfCheck(); return; }
+    let best=0,heard=r.results[0]||'';
+    for(const t of r.results){ const s=sim(it.lang,t,it); if(s>best){best=s;heard=t;} }
+    const ok=best>=0.67;
+    session.tries++;
+    area.innerHTML=`<div class="heard">
+      <div class="small muted">${heard?'We heard':''}</div><div class="h">${heard?esc(heard):(r.err==='no-speech'||!r.err?'Nothing heard. Try a little louder.':'The mic stopped ('+esc(r.err)+'). Try again.')}</div>
+      <div class="compare"><button class="iconbtn" id="cmpN">${ICON.play} Native</button>${r.url?`<button class="iconbtn" id="cmpY">${ICON.me} You</button>`:''}</div>
+      <div class="row" id="act"></div></div>`;
+    $('#cmpN').onclick=()=>sayItem(it);
+    if(r.url) $('#cmpY').onclick=()=>new Audio(r.url).play();
+    const act=$('#act');
+    if(ok){
+      beep(1046,120,.12);
+      if(session.tries===1){ session.attempts++; session.firstOk++; }
+      session.result[it.id]=(session.result[it.id]!==false);
+      act.innerHTML=`<button class="btn" id="nx">Next</button>`;
+      $('#nx').onclick=()=>{ session.done++; P().xp+=10; next(); };
+      $('#nx').focus();
+      sayItem(it);
+    } else {
+      if(session.tries===1){ session.attempts++; }
+      act.innerHTML=`<button class="btn" id="again">${ICON.mic} Try again</button>${session.tries>=2?`<button class="btn ghost" id="fine">Sounds right to me</button>`:''}`;
+      $('#again').onclick=()=>{ idle(); go(); };
+      if($('#fine')) $('#fine').onclick=()=>{ session.result[it.id]=false; session.done++; next(); };
+      sayItem(it,true);
+    }
+  }
+  if(fromScript) idle('Read it, then tap the mic.');
+  else { idle(); sayItem(it); }
+}
+function exChoose(ex,it){
+  const opts=shuffle([it,...pickDistractors(it,3)]);
+  const c=shell(`<div class="kind">What did you hear?</div>
+    <div class="say-row">${playBtns(it)}</div>
+    <div class="opts ${it.kind==='sent'?'one':''}">${opts.map(o=>`<button class="opt" data-id="${o.id}">${o.e&&it.kind==='word'?`<span class="em">${o.e}</span>`:''}<span>${esc(o.en)}</span></button>`).join('')}</div>`);
+  wirePlay(c,it); sayItem(it);
+  c.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    c.querySelectorAll('.opt').forEach(x=>x.disabled=true);
+    const ok=b.dataset.id===it.id; b.classList.add(ok?'right':'wrong');
+    if(!ok) c.querySelector(`.opt[data-id="${it.id}"]`).classList.add('right');
+    answer(ok,correctLine(it));
+  });
+}
+function exRead(ex,it){
+  const opts=shuffle([it,...pickDistractors(it,3)]);
+  const c=shell(`<div class="kind">Read it. What does it mean?</div>
+    <div class="big-nat">${esc(it.t)}</div>
+    <div class="opts ${it.kind==='sent'?'one':''}">${opts.map(o=>`<button class="opt" data-id="${o.id}">${o.e&&it.kind==='word'?`<span class="em">${o.e}</span>`:''}<span>${esc(o.en)}</span></button>`).join('')}</div>`);
+  c.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    c.querySelectorAll('.opt').forEach(x=>x.disabled=true);
+    const ok=b.dataset.id===it.id; b.classList.add(ok?'right':'wrong');
+    if(!ok) c.querySelector(`.opt[data-id="${it.id}"]`).classList.add('right');
+    sayItem(it); answer(ok,`<span class="nat">${esc(it.t)}</span> · ${esc(it.r)} · ${esc(it.en)}`);
+  });
+}
+function exBuild(ex,it){
+  const target=it.w;
+  const extra=shuffle(Object.values(ITEMS[it.lang]).filter(x=>x.kind==='sent'&&x.id!==it.id).flatMap(x=>x.w)).filter(w=>!target.some(t=>t[0]===w[0])).slice(0,target.length<3?2:1);
+  const bank=shuffle([...target,...extra]);
+  const picked=[];
+  const c=shell(`<div class="kind">Build what you hear</div>
+    <div class="prompt">${esc(it.en)}</div>
+    <div class="say-row">${playBtns(it)}</div>
+    <div class="tiles answer-line" id="ans"></div>
+    <div class="tiles" id="bank">${bank.map((w,i)=>`<button class="tile" data-i="${i}"><span class="w ${canRead({...it,t:w[0]})?'nat':''}">${esc(canRead({...it,t:w[0]})?w[0]:w[1])}</span><span class="g">${esc(w[2])}</span></button>`).join('')}</div>
+    <button class="btn wide" id="check" disabled>Check</button>`);
+  wirePlay(c,it); sayItem(it);
+  const ans=$('#ans');
+  const redraw=()=>{ ans.innerHTML=''; picked.forEach((bi,pi)=>{ const src=c.querySelector(`#bank .tile[data-i="${bi}"]`); const b=src.cloneNode(true); b.classList.remove('used'); b.onclick=()=>{ picked.splice(pi,1); src.classList.remove('used'); redraw(); }; ans.appendChild(b); }); $('#check').disabled=!picked.length; };
+  c.querySelectorAll('#bank .tile').forEach(b=>b.onclick=()=>{ if(b.classList.contains('used')) return; b.classList.add('used'); picked.push(+b.dataset.i); say(bank[+b.dataset.i][0],{lang:it.lang}); redraw(); });
+  $('#check').onclick=()=>{
+    const got=picked.map(i=>bank[i][0]).join('|'), want=target.map(w=>w[0]).join('|');
+    $('#check').disabled=true; c.querySelectorAll('.tile').forEach(t=>t.disabled=true);
+    answer(got===want,correctLine(it));
+    if(got===want) sayItem(it);
+  };
+}
+function exType(ex,it){
+  const ja=it.lang==='ja';
+  const letters=[...learnedLetters()];
+  const c=shell(`<div class="kind">Type it in ${ja?'hiragana':'Hangul'}</div>
+    ${it.e&&it.kind==='word'?`<div class="pic" aria-hidden="true">${it.e}</div>`:''}
+    <div class="prompt">${esc(it.en)}</div>
+    <div class="say-row">${playBtns(it)}</div>
+    <input class="type" id="ti" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" lang="${COURSE[it.lang].bcp}" aria-label="Your answer">
+    <p class="tinfo">${ja?'Type romaji and it turns into hiragana (ka → か, nn → ん). A Japanese keyboard works too.':'Type with the Korean 2-set layout on any keyboard (r → ㄱ, k → ㅏ), tap the letters below, or use a Korean keyboard.'}</p>
+    ${ja?'':`<div class="keypad" id="kp">${letters.filter(l=>KEYOF[l]).map(l=>`<button data-j="${l}">${l}<small>${KEYOF[l]}</small></button>`).join('')}<button data-bs aria-label="Delete">⌫</button></div>`}
+    <button class="btn wide" id="check">Check</button>`);
+  wirePlay(c,it); sayItem(it);
+  const ti=$('#ti');
+  ti.addEventListener('input',e=>{ if(e.isComposing) return; const v=ja?jaConvert(ti.value,false):koConvert(ti.value); if(v!==ti.value) ti.value=v; });
+  if(!ja){
+    ti.addEventListener('keydown',e=>{ if(e.key==='Backspace'&&!e.isComposing&&ti.selectionStart===ti.value.length&&ti.selectionEnd===ti.value.length&&/[가-힣]$/.test(ti.value)){ e.preventDefault(); ti.value=koBackspace(ti.value); } });
+    c.querySelectorAll('#kp button').forEach(b=>b.onclick=()=>{ ti.value=b.hasAttribute('data-bs')?koBackspace(ti.value):koConvert(ti.value+b.dataset.j); });
+  }
+  ti.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.isComposing){ e.preventDefault(); check(); } });
+  setTimeout(()=>ti.focus(),50);
+  function check(){
+    if(ti.disabled) return;
+    const v=ja?jaConvert(ti.value,true):koConvert(ti.value); ti.value=v;
+    if(!v.trim()) return;
+    const ok=norm(it.lang,v)===norm(it.lang,it.t);
+    ti.disabled=true; $('#check').disabled=true;
+    let tip='';
+    if(ok&&ja&&v.replace(/\s/g,'')!==it.t.replace(/\s/g,'')) tip='<br><span class="small">Spelled <span class="nat">'+esc(it.t)+'</span>. The particles は and を are written that way but said “wa” and “o”.</span>';
+    answer(ok,`<span class="nat">${esc(it.t)}</span> · ${esc(it.r)}${tip}`,{auto:!tip});
+    if(tip){ $('#sheet-next').hidden=false; $('#sheet-next').onclick=()=>next(); }
+  }
+  $('#check').onclick=check;
+}
+function exampleFor(letter){
+  const known=Object.values(ITEMS[state.lang]).filter(x=>x.kind==='word'&&x.lvl<=P().level&&(x.lvl<P().level||srs(x.id).box>0||session.seen.has(x.id)));
+  const pool=known.length?known:Object.values(ITEMS[state.lang]).filter(x=>x.kind==='word'&&x.lvl<=session.level);
+  return pool.find(x=>readUnits(state.lang,x.t).includes(letter.t));
+}
+function exLetterIntro(ex,it){
+  const exw=exampleFor(it);
+  const c=shell(`<div class="kind">New letter</div>
+    <div class="glyph" aria-label="${esc(it.t)}">${esc(it.t)}</div>
+    <div class="say-row"><span class="pron">${esc(it.r)}</span>${it.name?`<span class="muted small">name: ${esc(it.name)}</span>`:''} <button class="iconbtn" data-play aria-label="Play">${ICON.play}</button></div>
+    ${exw?`<button class="opt" id="exw" style="justify-content:flex-start"><span class="em">${exw.e}</span><span>You already say it in <span class="nat" style="font-size:1.25rem">${esc(exw.t)}</span> · ${esc(exw.r)} (${esc(exw.en.toLowerCase())})</span></button>`:''}
+    <button class="btn wide" id="ok">Next</button>`);
+  c.querySelector('[data-play]').onclick=()=>sayItem(it);
+  if(exw) $('#exw').onclick=()=>sayItem(exw);
+  sayItem(it).then(()=>{ if(exw&&session&&session.cur===ex) return new Promise(r=>setTimeout(r,400)).then(()=>sayItem(exw)); });
+  $('#ok').onclick=()=>{ session.done++; next(); };
+}
+function exPick(ex,it){
+  const lv=LV()[it.lvl];
+  let pool=lv.items.filter(x=>x.id!==it.id&&(session.introduced.has(x.t)||it.lvl<P().level));
+  if(pool.length<3) pool=pool.concat(Object.values(ITEMS[state.lang]).filter(x=>x.kind==='letter'&&x.id!==it.id&&learnedLetters().has(x.t)&&!pool.includes(x)));
+  const opts=shuffle([it,...shuffle(pool).slice(0,3)]);
+  const c=shell(`<div class="kind">Which letter do you hear?</div>
+    <div class="say-row"><button class="iconbtn" data-play aria-label="Play">${ICON.play}</button></div>
+    <div class="opts">${opts.map(o=>`<button class="opt letter" data-id="${o.id}">${esc(o.t)}</button>`).join('')}</div>`);
+  c.querySelector('[data-play]').onclick=()=>sayItem(it); sayItem(it);
+  c.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    c.querySelectorAll('.opt').forEach(x=>x.disabled=true);
+    const ok=b.dataset.id===it.id; b.classList.add(ok?'right':'wrong');
+    if(!ok) c.querySelector(`.opt[data-id="${it.id}"]`).classList.add('right');
+    answer(ok,correctLine(it));
+  });
+}
+function exTrace(ex,it){
+  const memory=ex.memory&&srs(it.id).box>=1||ex.memory&&session.tracedOnce&&session.tracedOnce.has(it.id);
+  const c=shell(`<div class="kind">${memory?'Write it from memory':'Trace the letter'}</div>
+    <div class="say-row"><span class="pron">${esc(it.r)}</span><button class="iconbtn" data-play aria-label="Play">${ICON.play}</button>${memory?'<button class="iconbtn" id="hint">Show guide</button>':''}</div>
+    <div class="trace-wrap" id="tw"><canvas id="guide"></canvas><canvas id="ink"></canvas></div>
+    <p class="tinfo" id="tmsg">${memory?'Write it in the box with your finger or mouse.':'Draw over the grey letter.'}</p>
+    <div class="row"><button class="btn ghost" id="clr">Clear</button><button class="btn" id="chk">Check</button></div>`);
+  c.querySelector('[data-play]').onclick=()=>sayItem(it); sayItem(it);
+  const font=getComputedStyle(document.getElementById('app')).getPropertyValue('--f-native');
+  const tw=$('#tw'), g=$('#guide'), k=$('#ink');
+  const strokes=[]; let cur=null, showGuide=!memory;
+  const fontSpec=px=>`700 ${px}px ${it.lang==='ja'?'"Zen Maru Gothic"':'"Gowun Dodum"'}, ${it.lang==='ja'?'"Hiragino Maru Gothic ProN", "Noto Sans JP"':'"Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR"'}, sans-serif`;
+  function drawGlyph(ctx,size,color,stroke=0){ ctx.clearRect(0,0,size,size); ctx.fillStyle=color; ctx.strokeStyle=color; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.font=fontSpec(size*0.78); ctx.fillText(it.t,size/2,size*0.53); if(stroke){ ctx.lineWidth=stroke; ctx.lineJoin='round'; ctx.strokeText(it.t,size/2,size*0.53); } }
+  function size(){
+    const r=tw.getBoundingClientRect(), d=window.devicePixelRatio||1;
+    [g,k].forEach(cv=>{ cv.width=r.width*d; cv.height=r.height*d; });
+    const gc=g.getContext('2d'); gc.setTransform(1,0,0,1,0,0);
+    if(showGuide) drawGlyph(gc,g.width,getComputedStyle(document.body).getPropertyValue('--line')||'#ccc'); else gc.clearRect(0,0,g.width,g.height);
+    redrawInk();
+  }
+  function redrawInk(){ const kc=k.getContext('2d'), s=k.width; kc.clearRect(0,0,s,s); kc.strokeStyle=getComputedStyle(document.body).getPropertyValue('--accent')||'#33f'; kc.lineWidth=s*0.055; kc.lineCap='round'; kc.lineJoin='round'; strokes.forEach(st=>{ kc.beginPath(); st.forEach((p,i)=>i?kc.lineTo(p[0]*s,p[1]*s):kc.moveTo(p[0]*s,p[1]*s)); if(st.length===1) kc.lineTo(st[0][0]*s+.1,st[0][1]*s); kc.stroke(); }); }
+  const pt=e=>{ const r=k.getBoundingClientRect(); return [(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height]; };
+  k.addEventListener('pointerdown',e=>{ k.setPointerCapture(e.pointerId); cur=[pt(e)]; strokes.push(cur); redrawInk(); });
+  k.addEventListener('pointermove',e=>{ if(!cur) return; cur.push(pt(e)); redrawInk(); });
+  const end=()=>{ cur=null; };
+  k.addEventListener('pointerup',end); k.addEventListener('pointercancel',end);
+  document.fonts&&document.fonts.load(fontSpec(100),it.t).then(size).catch(size); size();
+  window.addEventListener('resize',size,{once:true});
+  $('#clr').onclick=()=>{ strokes.length=0; redrawInk(); };
+  if($('#hint')) $('#hint').onclick=()=>{ showGuide=true; size(); };
+  $('#chk').onclick=()=>{
+    if(!strokes.length){ $('#tmsg').textContent='Draw the letter first.'; return; }
+    const N=120, mk=()=>{ const cv=document.createElement('canvas'); cv.width=cv.height=N; return cv.getContext('2d',{willReadFrequently:true}); };
+    const gT=mk(), gW=mk(), uT=mk(), uW=mk();
+    drawGlyph(gT,N,'#000'); drawGlyph(gW,N,'#000',N*0.11);
+    const ink=(ctx,w)=>{ ctx.strokeStyle='#000'; ctx.lineWidth=w; ctx.lineCap='round'; ctx.lineJoin='round'; strokes.forEach(st=>{ ctx.beginPath(); st.forEach((p,i)=>i?ctx.lineTo(p[0]*N,p[1]*N):ctx.moveTo(p[0]*N,p[1]*N)); if(st.length===1) ctx.lineTo(st[0][0]*N+.1,st[0][1]*N); ctx.stroke(); }); };
+    ink(uT,N*0.05); ink(uW,N*0.16);
+    const A=ctx=>ctx.getImageData(0,0,N,N).data;
+    const a=A(gT),b=A(gW),u=A(uT),w=A(uW);
+    let gN=0,gHit=0,uN=0,uHit=0;
+    for(let i=3;i<a.length;i+=4){ if(a[i]>100){gN++; if(w[i]>60) gHit++;} if(u[i]>100){uN++; if(b[i]>60) uHit++;} }
+    const cover=gN?gHit/gN:0, prec=uN?uHit/uN:0;
+    const ok=cover>=0.55&&prec>=0.7;
+    if(ok){ (session.tracedOnce=session.tracedOnce||new Set()).add(it.id); answer(true,`<span class="nat">${esc(it.t)}</span> · ${esc(it.r)}`); }
+    else {
+      session.tries++; if(session.tries===1) session.attempts++;
+      session.result[it.id]=false;
+      $('#tmsg').textContent=cover<0.55?'Some parts are missing. Clear and try again.':'Some lines are outside the letter. Clear and try again.';
+      if(!showGuide){ showGuide=true; size(); }
+    }
+  };
+}
+
+/* ============================== FINISH ============================== */
+function finishLesson(){
+  hideSheet();
+  const s=session, lang=s.lang;
+  for(const id in s.result) grade(id,s.result[id]);
+  // letters introduced count as learned on completion
+  touchStreak();
+  let unlockedMsg='';
+  const lvls=COURSE[lang].levels;
+  const advancing=!s.review&&s.level===state.langs[lang].level;
+  const rankBefore=rankOf(state.langs[lang].level);
+  if(advancing) state.langs[lang].level++;
+  const rankAfter=rankOf(state.langs[lang].level);
+  const lv=s.review?null:lvls[s.level];
+  if(lv&&lv.stage==='letters'){ const now=readableKnown(lang).length; const gained=now-s.readableBefore; if(gained>0) unlockedMsg=`You can now read <b>${gained}</b> more word${gained>1?'s':''} and sentence${gained>1?'s':''} you already say. They'll show in ${lang==='ja'?'hiragana':'Hangul'} from now on.`; }
+  save();
+  const acc=s.attempts?Math.round(100*s.firstOk/s.attempts):100;
+  const nextIdx=state.langs[lang].level, finished=nextIdx>=lvls.length;
+  const nextTitle=s.review||!advancing?(finished?'Mixed review':`Level ${nextIdx+1}: ${lvls[nextIdx].title}`):(finished?'Mixed review':`Level ${nextIdx+1}: ${lvls[nextIdx].title}`);
+  view='done';
+  $('#view').innerHTML=`<div class="done-card">
+    ${bearSVG(110,{happy:true,pot:rankAfter>=2,cls:'bob'})}
+    <div class="eyebrow">${s.review?'Review done':'Level '+(s.level+1)+' mastered'}</div>
+    <h2>${s.review?'Fresh in your head again':esc(lv.title)}</h2>
+    <div class="done-stats"><div><b>${acc}%</b><span class="small muted">first try</span></div><div><b>${Object.keys(s.result).length}</b><span class="small muted">${lv&&lv.stage==='letters'?'letters & words':'items practised'}</span></div><div><b>${P().xp}</b><span class="small muted">honey</span></div></div>
+    ${rankAfter>rankBefore?`<div class="unlock">Your cub grew. You're now a <b>${RANKS[rankAfter].name}</b>.</div>`:''}
+    ${unlockedMsg?`<div class="unlock">${unlockedMsg}</div>`:''}
+    <div class="muted">Up next · <b style="color:var(--ink)">${esc(nextTitle)}</b></div>
+    <div class="countdown" aria-hidden="true"><i id="cd"></i></div>
+    <div class="row"><button class="btn" id="gonow">Go now</button><button class="btn ghost" id="path">Back to the path</button></div>
+  </div>`;
+  beep(784,120); setTimeout(()=>beep(1046,180),130);
+  const goNext=()=>{ clearTimeout(t); if(view!=='done') return; if(finished) startReview(); else startLevel(nextIdx); };
+  const t=setTimeout(goNext,4200);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ const cd=$('#cd'); if(cd) cd.classList.add('go'); }));
+  $('#gonow').onclick=goNext;
+  $('#path').onclick=()=>{ clearTimeout(t); renderHome(); };
+}
+
+/* ============================== DRIVE MODE ============================== */
+const drive={on:false,paused:false,token:0,start:0,elapsed:0,count:0,okCount:0,lock:null,ui:null};
+const DRIVE_MS=15*60*1000;
+function openDrive(){
+  view='drive'; hideSheet();
+  const el=document.createElement('div'); el.className='drive'; el.id='drive';
+  el.innerHTML=`<div class="drive-top"><span id="dtime">15:00</span><button id="dexit">Exit</button></div>
+    <button class="drive-big" id="dbig"><span class="d1" id="d1">Start</span><span class="d2" id="d2">15 minutes · ${COURSE[state.lang].name}</span><span class="d3" id="d3"></span><span id="dbear">${bearSVG(120,{pot:true})}</span></button>
+    <p class="drive-note" id="dnote">Press Start before you pull out. Everything is spoken, so you never need to look. Tap anywhere on the big button to pause. ${mic.blocked?'Mic checking is not available in this view, so the app leaves a pause for you to repeat and does not mark answers.':'Your answers are checked by the mic and fed into your reviews.'}</p>`;
+  document.body.appendChild(el);
+  drive.ui=el;
+  $('#dexit').onclick=closeDrive;
+  $('#dbig').onclick=()=>{ if(!drive.on) startDrive(); else togglePause(); };
+}
+function closeDrive(){ drive.on=false; drive.token++; stopListening(); if('speechSynthesis' in window) speechSynthesis.cancel(); releaseLock(); if(drive.ui) drive.ui.remove(); drive.ui=null; save(); renderHome(); }
+async function wake(){ try{ drive.lock=await navigator.wakeLock.request('screen'); }catch(e){} }
+function releaseLock(){ try{ drive.lock&&drive.lock.release(); }catch(e){} drive.lock=null; }
+function dShow(a,b='',c=''){ if(!drive.ui) return; const db=$('#dbear'); if(db) db.remove(); $('#d1').textContent=a; $('#d2').textContent=b; $('#d3').textContent=c; }
+function tickClock(){ if(!drive.ui) return; const left=Math.max(0,DRIVE_MS-drive.elapsed-(drive.paused?0:Date.now()-drive.start)); const m=Math.floor(left/60000),s=Math.floor(left%60000/1000); $('#dtime').textContent=`${m}:${String(s).padStart(2,'0')} left · ${drive.count} done`; }
+function timeLeft(){ return DRIVE_MS-drive.elapsed-(Date.now()-drive.start); }
+function togglePause(){
+  if(drive.paused){ drive.paused=false; drive.start=Date.now(); $('#dbig').className='drive-big running'; wake(); runDrive(); }
+  else { drive.paused=true; drive.elapsed+=Date.now()-drive.start; drive.token++; stopListening(); if('speechSynthesis' in window) speechSynthesis.cancel(); $('#dbig').className='drive-big paused'; dShow('Paused','Tap to carry on'); releaseLock(); }
+}
+function drivePool(){
+  const lang=state.lang, lvl=P().level, now=Date.now();
+  const all=Object.values(ITEMS[lang]).filter(it=>it.kind!=='letter'&&it.lvl<=Math.min(lvl,COURSE[lang].levels.length-1));
+  const known=all.filter(it=>srs(it.id).box>0).sort((a,b)=>srs(a.id).due-srs(b.id).due);
+  const fresh=all.filter(it=>srs(it.id).box===0);
+  const due=known.filter(it=>srs(it.id).due<=now), later=known.filter(it=>srs(it.id).due>now);
+  // weave: due reviews first, a new item every third slot, then the rest
+  const out=[]; const f=[...fresh];
+  [...due,...later].forEach((it,i)=>{ out.push(it); if(i%3===2&&f.length) out.push(f.shift()); });
+  return out.concat(f);
+}
+function startDrive(){
+  drive.on=true; drive.paused=false; drive.start=Date.now(); drive.elapsed=0; drive.count=0; drive.okCount=0; drive.queue=drivePool(); drive.retry=[];
+  drive.clock=setInterval(()=>{ if(!drive.ui){ clearInterval(drive.clock); return; } tickClock(); if(drive.on&&!drive.paused&&timeLeft()<=0) endDrive(); },500);
+  $('#dbig').className='drive-big running';
+  wake(); touchStreak();
+  runDrive(true);
+}
+const pause=ms=>new Promise(r=>setTimeout(r,ms));
+async function runDrive(first){
+  const tok=++drive.token;
+  const alive=()=>drive.on&&!drive.paused&&drive.token===tok&&!!drive.ui;
+  const lang=state.lang;
+  if(first){ dShow('Listen','Starting'); await say(`Cub Talk, ${COURSE[lang].name} drive practice. Repeat after each beep.`,{en:true}); }
+  while(alive()&&timeLeft()>0){
+    if(!drive.queue.length) drive.queue=drivePool();
+    const it=drive.retry.length&&drive.count%2?drive.retry.shift():drive.queue.shift();
+    if(!it) break;
+    const isNew=srs(it.id).box===0;
+    let recallOk=null;
+    if(!isNew){
+      dShow('Recall','How do you say…',it.en);
+      await say('How do you say: '+it.en.replace(/[()]/g,''),{en:true}); if(!alive()) return;
+      beep(660,120);
+      const r1=await driveListen(it,4500); if(!alive()) return;
+      recallOk=r1;
+      if(r1===true){ await say('Yes.',{en:true}); }
+      else if(r1===false){ await say('It’s',{en:true}); }
+      if(!alive()) return;
+    } else {
+      dShow('New','',it.en);
+      await say('New. '+it.en.replace(/[()]/g,''),{en:true}); if(!alive()) return;
+    }
+    dShow('Listen','',it.en);
+    await sayItem(it); await pause(350); if(!alive()) return;
+    if(isNew||recallOk!==true){ await sayItem(it,true); if(!alive()) return; }
+    let ok=null;
+    for(let attempt=0;attempt<2&&alive();attempt++){
+      dShow('Your turn','Repeat it',it.en);
+      beep(880,140);
+      ok=await driveListen(it,Math.max(3500,1600+it.t.length*380));
+      if(!alive()) return;
+      if(ok===null){ await pause(400); break; }
+      if(ok){ beep(1046,120,.1); await say(['Good.','Nice.','Great.','That’s it.'][Math.floor(Math.random()*4)],{en:true}); break; }
+      if(attempt===0){ await say('Close. Again.',{en:true}); if(!alive()) return; await sayItem(it,true); }
+      else { await say('Keep going. It will come back later.',{en:true}); }
+    }
+    if(!alive()) return;
+    drive.count++;
+    if(ok!==null||recallOk!==null){
+      const good=(recallOk!==false)&&ok!==false;
+      if(isNew&&ok) { const s=srs(it.id); s.box=1; s.due=Date.now()+BOX_HOURS[1]*3600e3; s.ok++; }
+      else grade(it.id,good);
+      if(good) drive.okCount++; else drive.retry.push(it);
+      P().xp+=good?10:2; save();
+    } else if(isNew){ const s=srs(it.id); s.box=1; s.due=Date.now()+BOX_HOURS[1]*3600e3; save(); }
+    await pause(600);
+  }
+  if(alive()&&timeLeft()<=0) endDrive();
+}
+function driveListen(it,ms){
+  if(mic.blocked) return pause(ms).then(()=>null);
+  return listen(it.lang,{maxMs:ms+1500,record:false}).then(r=>{
+    if(r.unavailable) return null;
+    if(!r.results.length) return false;
+    return r.results.some(t=>sim(it.lang,t,it)>=0.62);
+  });
+}
+async function endDrive(){
+  if(!drive.on) return;
+  drive.on=false; drive.token++; stopListening(); clearInterval(drive.clock);
+  dShow('Done',`${drive.count} phrases practised`);
+  $('#dbig').className='drive-big paused';
+  save();
+  await say(`That’s your drive. You practised ${drive.count} phrases${mic.blocked?'':', and got '+drive.okCount+' right'}. See you next time.`,{en:true});
+  releaseLock();
+}
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&drive.on&&!drive.paused) wake(); });
+
+/* ============================== BOOT ============================== */
+$('#brandbear').innerHTML=bearSVG(34);
+renderHome();
+</script>
+<script>
+if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }
+</script>
+</body>
+</html>
